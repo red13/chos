@@ -1,0 +1,413 @@
+
+bootpack.c,447
+Queue16_t msg_queue;msg_queue12,183
+#define MSG_BUF_LENGTH MSG_BUF_LENGTH13,205
+unsigned short msg_buf[MSG_BUF_LENGTH];msg_buf14,235
+timer_manager_t* kernel_timer_manager = NULL;kernel_timer_manager15,276
+void init_mouse_cursor( unsigned long wnd_id, char bg_color )init_mouse_cursor18,327
+unsigned  long notify_param;notify_param142,4050
+void notify_timer( void* param ){notify_timer143,4080
+void HariMain( void )HariMain152,4234
+
+debug.c,744
+static char* debug_vram;debug_vram8,100
+static short debug_scrn_width;debug_scrn_width9,126
+static short debug_scrn_height;debug_scrn_height10,158
+static char debug_string[DEBUG_STR_LENGTH];debug_string11,191
+static char debug_buffer[DEBUG_STR_LENGTH * DEBUG_STR_MAX];debug_buffer12,236
+static unsigned int debug_write_num = 0;debug_write_num13,297
+static void print_debug_string( unsigned int num, unsigned int place )print_debug_string16,343
+void set_debug_info( char* vram, short width, short height )set_debug_info27,794
+void debug_print( char* str )debug_print34,956
+void push_debug_string( char* str )push_debug_string47,1347
+void dump_debug_string( void )dump_debug_string64,1802
+void assert( void )assert80,2061
+
+dsctbl.c,275
+void init_gdtidt( void )init_gdtidt3,25
+void set_segment_descriptor( SEGMENT_DESCRIPTOR* sd, unsigned int limit, int base, int ar )set_segment_descriptor33,1048
+void set_gate_descriptor( GATE_DESCRIPTOR* gd, int offset, int selector, int ar )set_gate_descriptor49,1528
+
+graphic.c,589
+void init_palette( void )init_palette3,25
+void set_palette( int start, int end, unsigned char* rgb )set_palette31,956
+void boxfill8( unsigned char* vram, int xsize, unsigned char c, int x0, int y0, int x1, int y1 )boxfill854,1546
+void putfont8( char *vram, int xsize, int x, int y, char color, char *font )putfont890,2800
+void putfonts8_asc( char* vram, int xsize, int x, int y, char color, unsigned char* str )putfonts8_asc111,3468
+void putfonts8_ascbg( char* vram,putfonts8_ascbg122,3745
+void putblock8_8( char* vram, int vxsize, int pxsize, int pysize,putblock8_8138,4142
+
+int.c,212
+static TIME_t time;time11,201
+void init_pic( void )init_pic13,224
+void init_pit( void )init_pit35,1088
+void inthandler20(int *esp)inthandler2044,1262
+unsigned long get_systime( void )get_systime67,1890
+
+keyboard.c,155
+void inthandler21( int *esp )inthandler219,156
+void wait_KBC_sendready( void )wait_KBC_sendready21,492
+void init_keyboard( void )init_keyboard34,746
+
+memory.c,541
+unsigned int memtest( unsigned int start, unsigned int end )memtest3,25
+void memman_init( MEMMAN* man )memman_init41,814
+unsigned int memman_total( MEMMAN* man )memman_total50,1072
+unsigned int memman_alloc( MEMMAN* man, unsigned int size )memman_alloc61,1272
+int memman_free( MEMMAN* man, unsigned int addr, unsigned int size )memman_free90,2064
+unsigned int memman_alloc_4k( MEMMAN* man, unsigned int size )memman_alloc_4k170,4378
+int memman_free_4k( MEMMAN* man, unsigned int addr, unsigned int size )memman_free_4k178,4572
+
+mouse.c,185
+void inthandler2c( int *esp )inthandler2c10,168
+void enable_mouse( MouseDec_t* mdec )enable_mouse22,558
+int mouse_decode( MouseDec_t* mdec, unsigned char data )mouse_decode36,861
+
+queue.c,559
+#define queue_c_queue_c_3,22
+void queue8_init( Queue8_t* que, int size, unsigned char* buf )queue8_init6,64
+void queue16_init( Queue16_t* q, int size, unsigned short* buf )queue16_init17,317
+int queue8_put( Queue8_t* que, unsigned char data )queue8_put31,606
+int queue16_put( Queue16_t* q, unsigned short data )queue16_put49,955
+int queue8_get( Queue8_t* que )queue8_get70,1391
+int queue16_get( Queue16_t* q )queue16_get88,1730
+int queue8_status( Queue8_t* que )queue8_status107,2090
+int queue16_status( Queue16_t* q )queue16_status112,2170
+
+task.c,127
+static tss32_manager_t gtsk;gtsk3,21
+void init_task(void){init_task5,53
+int create_task( task_id* id ){create_task20,386
+
+timer.c,427
+int init_timer_manager( MEMMAN* mm, timer_manager_t** tm )init_timer_manager7,104
+int add_timer( timer_manager_t* tm, timer_t* t, unsigned long* id )add_timer34,670
+int delete_timer( timer_manager_t* tm, unsigned long id )delete_timer92,1880
+static int reentry_cyclic_timer( timer_manager_t* tm, timer_t* t )reentry_cyclic_timer145,3001
+int add_cyclic_timer( timer_manager_t* tm, timer_t* t )add_cyclic_timer151,3105
+
+wm.c,1329
+static WindowManager* pWindowManager = NULL;pWindowManager10,138
+int get_pixel_unit( WindowColorDepth depth )get_pixel_unit22,453
+Window* get_window( unsigned long id )get_window39,768
+int create_window_manager( MEMMAN* mm,create_window_manager64,1250
+void destroy_window_manager( void )destroy_window_manager138,3338
+int create_window( MEMMAN* mm,create_window161,4085
+void destroy_window( unsigned long id )destroy_window269,7367
+int move_window( unsigned long window_id,move_window305,8285
+int show_window_abs( unsigned long window_id,show_window_abs348,9246
+int show_window( unsigned long wnd_id,show_window472,12911
+int show_whole_window( unsigned long wnd_id )show_whole_window502,13503
+void display_window( void )display_window525,13959
+int print_dot( unsigned long window_id,print_dot565,14811
+int fill_rect( unsigned long window_id,fill_rect592,15396
+int print_string( unsigned long window_id,print_string627,16247
+int print_string_bg( unsigned long window_id,print_string_bg647,16717
+void exchange_window_priority( unsigned long a, unsigned long b )exchange_window_priority670,17243
+void window_force_display( unsigned long id )window_force_display711,18061
+void debug_print_window_manager( void )debug_print_window_manager735,18665
+void set_rect( rect_t* rect,set_rect745,18869
+
+bootpack.h,4486
+#define BOOTPACK_H_BOOTPACK_H_2,21
+#define ADR_BOOTINFO ADR_BOOTINFO5,60
+#define ADR_IDT ADR_IDT7,97
+#define LIMIT_IDT LIMIT_IDT8,132
+#define ADR_GDT ADR_GDT9,167
+#define LIMIT_GDT LIMIT_GDT10,202
+#define ADR_BOTPAK ADR_BOTPAK11,237
+#define LIMIT_BOTPAK LIMIT_BOTPAK12,272
+#define AR_DATA32_RW AR_DATA32_RW13,307
+#define AR_CODE32_ER AR_CODE32_ER14,338
+#define AR_INTGATE32 AR_INTGATE3215,369
+#define PORT_KEYDAT PORT_KEYDAT17,402
+#define COL8_000000 COL8_00000019,434
+#define COL8_FF0000 COL8_FF000020,461
+#define COL8_00FF00 COL8_00FF0021,488
+#define COL8_FFFF00 COL8_FFFF0022,515
+#define COL8_0000FF COL8_0000FF23,542
+#define COL8_FF00FF COL8_FF00FF24,569
+#define COL8_00FFFF COL8_00FFFF25,596
+#define COL8_FFFFFF COL8_FFFFFF26,623
+#define COL8_C6C6C6 COL8_C6C6C627,650
+#define COL8_840000 COL8_84000028,677
+#define COL8_008400 COL8_00840029,704
+#define COL8_848400 COL8_84840030,732
+#define COL8_000084 COL8_00008431,760
+#define COL8_840084 COL8_84008432,788
+#define COL8_008484 COL8_00848433,816
+#define COL8_848484 COL8_84848434,844
+#define PORT_KEYDAT PORT_KEYDAT37,876
+#define PORT_KEYSTA PORT_KEYSTA38,916
+#define PORT_KEYCMD PORT_KEYCMD39,956
+#define KEYSTA_SEND_NOTREADY KEYSTA_SEND_NOTREADY40,996
+#define KEYCMD_WRITE_MODE KEYCMD_WRITE_MODE41,1034
+#define KEYCMD_SENDTO_MOUSE KEYCMD_SENDTO_MOUSE42,1072
+#define MOUSECMD_ENABLE MOUSECMD_ENABLE43,1110
+#define KBC_MODE KBC_MODE44,1148
+#define EFLAGS_AC_BIT EFLAGS_AC_BIT46,1188
+#define CR0_CACHE_DISABLE CR0_CACHE_DISABLE47,1229
+#define MEMMAN_FREES MEMMAN_FREES49,1271
+#define MEMMAN_ADDR MEMMAN_ADDR50,1300
+#define MAX_SHEETS MAX_SHEETS52,1337
+#define SHEET_USE SHEET_USE53,1363
+#define PXL_STRING_WIDTH PXL_STRING_WIDTH55,1389
+#define PXL_STRING_HEIGHT PXL_STRING_HEIGHT56,1420
+#define PXL_CURSOR_WIDTH PXL_CURSOR_WIDTH57,1452
+#define PXL_CURSOR_HEIGHT PXL_CURSOR_HEIGHT58,1484
+#define PXL_INFO_WND_WIDTH PXL_INFO_WND_WIDTH60,1518
+#define PXL_INFO_WND_HEIGHT PXL_INFO_WND_HEIGHT61,1553
+typedef enum tag_E_QUEUE_EVENT_TYPEtag_E_QUEUE_EVENT_TYPE64,1601
+    E_QUEUE_EVENT_TYPE_KEY = 0,E_QUEUE_EVENT_TYPE_KEY66,1641
+    E_QUEUE_EVENT_TYPE_MOUSE,E_QUEUE_EVENT_TYPE_MOUSE67,1674
+    E_QUEUE_EVENT_TYPE_TIMER,E_QUEUE_EVENT_TYPE_TIMER68,1705
+    E_QUEUE_EVENT_TYPE_MAX,E_QUEUE_EVENT_TYPE_MAX69,1736
+} E_QUEUE_EVENT_TYPE;E_QUEUE_EVENT_TYPE70,1765
+typedef struct tag_BOOTINFOtag_BOOTINFO75,1828
+    char cyls;cyls77,1860
+    char leds;leds78,1876
+    char vmode;vmode79,1892
+    char reserve;reserve80,1909
+    short scrnx;scrnx81,1928
+    short scrny;scrny82,1946
+    char* vram;vram83,1964
+} BOOTINFO_t;BOOTINFO_t84,1981
+typedef struct tag_FREEINFOtag_FREEINFO86,1998
+    unsigned int addr;addr88,2030
+    unsigned int size;size89,2054
+} FREEINFO;FREEINFO90,2078
+typedef struct tag_MEMMANtag_MEMMAN92,2093
+    int free_num;free_num94,2123
+    int maxfree_num;maxfree_num95,2142
+    int lostsize;lostsize96,2164
+    int losts;losts97,2183
+    FREEINFO free[MEMMAN_FREES];free98,2199
+} MEMMAN;MEMMAN99,2233
+typedef struct tag_SEGMENT_DESCRIPTORtag_SEGMENT_DESCRIPTOR104,2310
+    short limit_low;limit_low106,2352
+    short base_low;base_low107,2374
+    char base_mid;base_mid108,2395
+    char access_right;access_right109,2415
+    char limit_high;limit_high110,2439
+    char base_high;base_high111,2461
+} SEGMENT_DESCRIPTOR;SEGMENT_DESCRIPTOR112,2482
+typedef struct tag_GATE_DESCRIPTORtag_GATE_DESCRIPTOR114,2507
+    short offset_low;offset_low116,2546
+    short selector;selector117,2569
+    char dw_count;dw_count118,2590
+    char access_right;access_right119,2610
+    short offset_high;offset_high120,2634
+} GATE_DESCRIPTOR;GATE_DESCRIPTOR121,2658
+typedef struct tag_SHEETtag_SHEET127,2723
+    unsigned char* buf;buf129,2752
+    int bxsize;bxsize130,2777
+    int bysize;bysize131,2794
+    int vx0;vx0132,2811
+    int vy0;vy0133,2825
+    int color;color134,2839
+    int height;height135,2855
+    int flags;flags136,2872
+    struct tag_SHEET_CTRL* ctrl;ctrl137,2888
+} SHEET;SHEET138,2922
+typedef struct tag_SHEET_CTRLtag_SHEET_CTRL140,2934
+    unsigned char* vram;vram142,2968
+    unsigned char* map;map143,2994
+    int xsize;xsize144,3019
+    int ysize;ysize145,3035
+    int top;top146,3051
+    SHEET* p_sheet[MAX_SHEETS];p_sheet147,3065
+    SHEET  sheet[MAX_SHEETS];sheet148,3098
+} SHEET_CTRL;SHEET_CTRL149,3129
+
+debug.h,121
+#define DEBUG_H_DEBUG_H_2,18
+#define DEBUG_STR_LENGTH DEBUG_STR_LENGTH5,50
+#define DEBUG_STR_MAX DEBUG_STR_MAX6,81
+
+int.h,900
+#define INT_H_INT_H_2,16
+#define jiffies jiffies5,56
+#define PIC0_ICW1 PIC0_ICW111,130
+#define PIC0_OCW2 PIC0_OCW212,159
+#define PIC0_IMR PIC0_IMR13,188
+#define PIC0_ICW2 PIC0_ICW214,217
+#define PIC0_ICW3 PIC0_ICW315,246
+#define PIC0_ICW4 PIC0_ICW416,275
+#define PIC1_ICW1 PIC1_ICW117,304
+#define PIC1_OCW2 PIC1_OCW218,333
+#define PIC1_IMR PIC1_IMR19,362
+#define PIC1_ICW2 PIC1_ICW220,391
+#define PIC1_ICW3 PIC1_ICW321,420
+#define PIC1_ICW4 PIC1_ICW422,449
+#define PIT_CTRL PIT_CTRL27,600
+#define PIT_CNT0 PIT_CNT028,627
+#define TIMER_IRQ_PER_SECOND TIMER_IRQ_PER_SECOND31,693
+#define CLOCK_FREQUENCY CLOCK_FREQUENCY34,751
+#define PIT_CNT0_VALUE PIT_CNT0_VALUE46,1210
+#define PIT_CNT0_HIGH PIT_CNT0_HIGH48,1244
+#define PIT_CNT0_LOW PIT_CNT0_LOW49,1300
+typedef struct tag_TIME_t{tag_TIME_t52,1353
+	unsigned long count;count53,1381
+}TIME_t;TIME_t54,1404
+
+mouse.h,780
+#define MOUSE_HMOUSE_H2,17
+#define PORT_KEYDAT PORT_KEYDAT4,36
+#define PORT_KEYSTA PORT_KEYSTA5,76
+#define PORT_KEYCMD PORT_KEYCMD6,116
+#define KEYSTA_SEND_NOTREADY KEYSTA_SEND_NOTREADY7,156
+#define KEYCMD_WRITE_MODE KEYCMD_WRITE_MODE8,194
+#define KEYCMD_SENDTO_MOUSE KEYCMD_SENDTO_MOUSE9,232
+#define MOUSECMD_ENABLE MOUSECMD_ENABLE10,270
+#define KBC_MODE KBC_MODE11,308
+#define MOUSE_BUTTON_LEFT MOUSE_BUTTON_LEFT13,348
+#define MOUSE_BUTTON_RIGHT MOUSE_BUTTON_RIGHT14,386
+#define MOUSE_BUTTON_CENTER MOUSE_BUTTON_CENTER15,424
+typedef struct tag_MouseDec_ttag_MouseDec_t17,464
+    unsigned char buf[3];buf19,498
+    unsigned char phase;phase20,525
+    int x;x21,551
+    int y;y22,563
+    int button;button23,575
+} MouseDec_t;MouseDec_t24,592
+
+queue.h,1149
+#define QUEUE_HQUEUE_H2,17
+#define FLAGS_OVERRUN FLAGS_OVERRUN4,36
+typedef struct tag_Queue8_ttag_Queue8_t7,77
+    unsigned char *buf;  buf9,109
+    unsigned long write;     /* 次に書き込むところ */write10,136
+    unsigned long read;     /* 次に読み出すところ */read11,191
+    unsigned long size;  /* bufのサイズ */size12,245
+    unsigned long free;  /* バッファの空き */free13,289
+    unsigned long flags; /* オーバーフローの有無 */flags14,336
+} Queue8_t;Queue8_t15,389
+typedef struct tag_Queue16_ttag_Queue16_t17,404
+    unsigned short* buf;buf19,437
+    unsigned long write;write20,463
+    unsigned long read;read21,489
+    unsigned long size;size22,514
+    unsigned long free;free23,539
+    unsigned long flags;flags24,564
+} Queue16_t;Queue16_t25,590
+typedef struct tag_Queue32_ttag_Queue32_t27,606
+    unsigned long* buf;buf29,639
+    unsigned long write;write30,664
+    unsigned long read;read31,690
+    unsigned long size;size32,715
+    unsigned long free;free33,740
+    unsigned long flags;flags34,765
+} Queue32_t;Queue32_t35,791
+#define EXTERNEXTERN38,830
+#define EXTERN EXTERN40,853
+
+task.h,1216
+#define TASK_MAX TASK_MAX1,0
+typedef struct tag_tss32_t{tag_tss32_t4,60
+	unsigned long backlink;backlink5,89
+	unsigned long esp0;esp06,115
+	unsigned long ss0;ss07,137
+	unsigned long esp1;esp18,158
+	unsigned long ss1;ss19,180
+	unsigned long esp2;esp210,201
+	unsigned long ss2;ss211,223
+	unsigned long cr3;cr312,244
+	unsigned long eip;eip14,267
+	unsigned long eflags;eflags15,288
+	unsigned long eax;eax16,312
+	unsigned long ecx;ecx17,333
+	unsigned long edx;edx18,354
+	unsigned long ebx;ebx19,375
+	unsigned long esp;esp20,396
+	unsigned long ebp;ebp21,417
+	unsigned long esi;esi22,438
+	unsigned long edi;edi23,459
+	unsigned long es;es25,482
+	unsigned long cs;cs26,502
+	unsigned long ss;ss27,522
+	unsigned long ds;ds28,542
+	unsigned long fs;fs29,562
+	unsigned long gs;gs30,582
+	unsigned long ldtr;ldtr32,604
+	unsigned long iomap;iomap33,626
+} tss32_t;tss32_t34,649
+typedef struct tag_tss32_manager_t{tag_tss32_manager_t49,927
+	tss32_list_head_t	list;list50,964
+	tss32_list_t		buf[TASK_MAX];buf51,990
+} tss32_manager_t;tss32_manager_t52,1021
+typedef unsigned long task_id_t;task_id_t54,1043
+typedef int (*TASK_ENTRY_FUNC)(void*);TASK_ENTRY_FUNC56,1079
+
+timer.h,844
+#define TIMER_MAX TIMER_MAX1,0
+typedef struct tag_timer_t{tag_timer_t3,27
+	unsigned long	timeout;timeout4,56
+	void (*func)(void *);func5,81
+	void*			param;param6,105
+} timer_t;timer_t7,122
+typedef struct tag_timer_list_t{tag_timer_list_t9,136
+	struct tag_timer_list_t* 	prev;prev10,170
+	struct tag_timer_list_t* 	next;next11,204
+	unsigned long 				valid;valid12,238
+	timer_t 					t;t13,265
+} timer_list_t;timer_list_t14,283
+typedef struct tag_timer_list_head_t{tag_timer_list_head_t16,302
+	timer_list_t* head;head17,341
+	timer_list_t* tail;tail18,363
+	unsigned long num;num19,385
+} timer_list_head_t;timer_list_head_t20,406
+typedef struct tag_timer_manager_t{tag_timer_manager_t22,430
+	timer_list_head_t 	list;list23,467
+	timer_list_t 		buf[TIMER_MAX];buf24,494
+} timer_manager_t;timer_manager_t25,527
+
+wm.h,3150
+#define __WM_H___WM_H_2,17
+#define WM_WINDOW_NAME_LENGTH WM_WINDOW_NAME_LENGTH7,62
+#define WM_WINDOW_STATUS_NORMAL WM_WINDOW_STATUS_NORMAL11,143
+#define WM_WINDOW_STATUS_NOTITLE WM_WINDOW_STATUS_NOTITLE12,182
+#define WM_WINDOW_STATUS_INVISIBLE WM_WINDOW_STATUS_INVISIBLE13,230
+#define WM_WINDOW_TITLE_HEIGHT WM_WINDOW_TITLE_HEIGHT16,304
+#define WM_WINDOW_FRAME_WIDTH WM_WINDOW_FRAME_WIDTH18,367
+typedef enum tag_WindowColorDepthtag_WindowColorDepth21,421
+    WINDOW_COLOR_DEPTH_DEFAULT,  /* Window生成時のデフォルト指定 */WINDOW_COLOR_DEPTH_DEFAULT23,459
+    WINDOW_COLOR_DEPTH_16,       /* 16色 */WINDOW_COLOR_DEPTH_1624,528
+    WINDOW_COLOR_DEPTH_256,      /* 256色 */WINDOW_COLOR_DEPTH_25625,573
+    WINDOW_COLOR_DEPTH_65536,    /* 65536色 */WINDOW_COLOR_DEPTH_6553626,619
+    WINDOW_COLOR_DEPTH_RGB_8,    /* RGB 8bit */WINDOW_COLOR_DEPTH_RGB_827,667
+    WINDOW_COLOR_DEPTH_RGB_16,   /* RGB 16bit */WINDOW_COLOR_DEPTH_RGB_1628,716
+    WINDOW_COLOR_DEPTH_RGB_32,   /* RGB 32bit */WINDOW_COLOR_DEPTH_RGB_3229,766
+} WindowColorDepth;WindowColorDepth30,816
+typedef struct tag_position_t{tag_position_t32,839
+    unsigned long x;			/* left -> right */x33,871
+    unsigned long y;			/* top -> bottom */y34,915
+} position_t;position_t35,959
+typedef struct tag_rect_t{tag_rect_t37,976
+	position_t pos;				/* left & top */pos38,1004
+	unsigned long width;width39,1042
+	unsigned long height;height40,1065
+} rect_t;rect_t41,1089
+struct tag_WindowManager{tag_WindowManager44,1130
+    struct tag_Window* 	list_head;	/* ウインドウのリスト */list_head45,1157
+    unsigned long 		last_window_id;	/* 最後につけたid */last_window_id46,1218
+    MEMMAN*  			memory_manager;memory_manager47,1276
+    WindowColorDepth 	color_depth;	/* 今の表示モード */color_depth48,1309
+    unsigned char* 		vram;   /* vramの先頭へのポインタ */vram49,1366
+    unsigned char* 		buffer; /* 描画用のバッファ */buffer50,1425
+    unsigned char* 		map;    /* 描画バッファの更新ビットフラグ列 */map51,1478
+    unsigned long 		height; /* バッファの高さ */height52,1547
+    unsigned long 		width;  /* バッファの幅 */width53,1597
+struct tag_Window{tag_Window57,1669
+    unsigned char* 				buffer;	/* ウインドウ描画用バッファ */buffer58,1689
+    struct tag_Window* 			prev;	/* リストの前のウインドウ：NULLなら先頭 */prev59,1752
+    struct tag_Window* 			next;	/* リストの次のウインドウ：NULLなら終端 */next60,1828
+    struct tag_WindowManager* 	manager;	/* 親のウインドウマネージャ */manager61,1904
+    unsigned long 				window_id;window_id62,1976
+    WindowColorDepth 			color_depth;	/* ウインドウの表示モード */color_depth63,2010
+    position_t 					pos;	/* スクリーンに対するウインドウの左上位置 */pos64,2077
+    unsigned long 				height;	/* ウインドウ全体の高さ */height65,2148
+    unsigned long 				width;	/* ウインドウ全体の幅 */width66,2206
+    unsigned long 				status;	/* 状態をビット列で保持 */status67,2261
+    char 						name[WM_WINDOW_NAME_LENGTH];	/* 名前 */name68,2319
+typedef struct tag_Window Window;Window71,2381
+typedef struct tag_WindowManager WindowManager;WindowManager72,2416
