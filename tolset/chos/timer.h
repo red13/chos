@@ -1,5 +1,7 @@
 #define TIMER_MAX (100)
 
+typedef unsigned long timer_id_t;
+
 typedef struct tag_timer_t{
 	unsigned long	timeout;
 	void (*func)(void *);
@@ -10,6 +12,7 @@ typedef struct tag_timer_list_t{
 	struct tag_timer_list_t* 	prev;
 	struct tag_timer_list_t* 	next;
 	unsigned long 				valid;
+	unsigned long				is_cyclic;
 	timer_t 					t;
 } timer_list_t;
 
@@ -25,5 +28,9 @@ typedef struct tag_timer_manager_t{
 } timer_manager_t;
 
 int init_timer_manager( MEMMAN* mm, timer_manager_t** tm );
-int add_timer( timer_manager_t* tm, timer_t* t, unsigned long* id );
-int delete_timer( timer_manager_t* tm, unsigned long id );
+void timer_event_procedure( timer_manager_t* tm );
+
+int add_timer( timer_manager_t* tm, timer_t* t, timer_id_t* id );
+int delete_timer( timer_manager_t* tm, timer_id_t id );
+
+int add_cyclic_timer( timer_manager_t* tm, timer_t* t, timer_id_t* id );

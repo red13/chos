@@ -145,6 +145,26 @@ void notify_timer( void* param ){
 	assert();
 }
 
+unsigned long ctimer_param;
+void ctimer_func( void* param ){
+	unsigned long wid = *(unsigned long*)param;
+	static unsigned char color = 0;
+	char str[41];
+
+	color = (color+1)%16;
+	
+    sprintf( str, "param(%x)", param );
+    push_debug_string( str );
+    sprintf( str, "ctimer param(%d)", ctimer_param );
+    push_debug_string( str );
+    sprintf( str, "ctimer done (desktop_wnd_id = %d)", wid );
+    push_debug_string( str );
+
+	if( color == 3 ){
+		assert();
+	}
+}
+
 
 /***************/
 /* entry point */
@@ -169,7 +189,8 @@ void HariMain( void )
     int 			ret;
     unsigned long 	que_status 	   = 0;
 	timer_t timer;
-	unsigned long timer_id;
+	timer_id_t timer_id;
+	timer_id_t ctimer_id;
 
     init_gdtidt();
     init_pic();
@@ -204,7 +225,7 @@ void HariMain( void )
 	/* タイマー管理情報を初期化 */
 	init_timer_manager( memman, &kernel_timer_manager );
 
-#if 1
+#if 0
 	/* タイマーを設定 */
 	notify_param = &desktop_wnd_id;
 	timer.timeout = get_systime() + 200;
@@ -212,7 +233,6 @@ void HariMain( void )
 	timer.param = &notify_param;
 	add_timer( kernel_timer_manager, &timer, &timer_id );
 #endif
-
     /* 画面のパレットを設定する */
     init_palette();
 
@@ -265,6 +285,15 @@ void HariMain( void )
         assert();
     }
 
+#if 1
+	/* タイマーを設定 */
+	ctimer_param = desktop_wnd_id;
+	timer.timeout = get_systime() + 200;
+	timer.func = ctimer_func;
+	timer.param = &ctimer_param;
+	add_cyclic_timer( kernel_timer_manager, &timer, &ctimer_id );
+#endif
+
     /* マウスカーソル用のウインドウを作る */
     ret = create_window( memman,
                          WINDOW_COLOR_DEPTH_16,
@@ -285,7 +314,7 @@ void HariMain( void )
     init_mouse_cursor( cursor_wnd_id, COL8_0000FF );
     move_window( cursor_wnd_id, mx, my );
 
-#if 1
+#if 0
 	/* タイマー削除のテスト */
 	if( delete_timer( kernel_timer_manager, timer_id ) ){
 		push_debug_string( "delete_timer returns TRUE" );
@@ -400,16 +429,7 @@ void HariMain( void )
 			/* タイマーイベント */
 			else if( msg_type == E_QUEUE_EVENT_TYPE_TIMER )
 			{
-				timer_list_t* cur;
-				timer_t t;
-				cur = kernel_timer_manager->list.head;
-				t.func = cur->t.func;
-				t.param = cur->t.param;
-				cur->valid = 0;
-				kernel_timer_manager->list.head = cur->next;
-				kernel_timer_manager->list.num--;
-				/* コールバックする */
-				(t.func)(t.param);
+				timer_event_procedure(kernel_timer_manager);
 			}
 			else
 			{
