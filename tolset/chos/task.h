@@ -56,3 +56,7 @@ typedef unsigned long task_id_t;
 typedef int (*TASK_ENTRY_FUNC)(void*);
 
 
+void init_task(void);
+int create_task( task_id* id );
+
+

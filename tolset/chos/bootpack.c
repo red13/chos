@@ -37,25 +37,6 @@ void init_mouse_cursor( unsigned long wnd_id, char bg_color )
         "............*OO*",
         ".............***",
     };
-/*     const char cursor[16][16] = */
-/*     { */
-/*         "*...............", */
-/*         "*...............", */
-/*         "**..............", */
-/*         "*O*.............", */
-/*         "*OO*............", */
-/*         "*OO*............", */
-/*         "*OOO*...........", */
-/*         "*OOOO*..........", */
-/*         "*OOOO*..........", */
-/*         "*OOOOO*.........", */
-/*         "*OOOOOO*........", */
-/*         "*OOOOOO*........", */
-/*         "*OOOOOOO*.......", */
-/*         "*OOOOOOOO*......", */
-/*         "*OOOOOOOOO*.....", */
-/*         "************....", */
-/*     }; */
 
     for( y = 0; y < 16; y++ )
     {
@@ -77,67 +58,6 @@ void init_mouse_cursor( unsigned long wnd_id, char bg_color )
     }
     return;
 }
-
-#if 0 /* 未使用のため削除 */
-void make_window8( unsigned char* buf, int xsize, int ysize, char* title )
-{
-    static char close_button[14][16] = {
-        "OOOOOOOOOOOOOOO@",
-        "OQQQQQQQQQQQQQ$@",
-        "OQQQQQQQQQQQQQ$@",
-        "OQQQ@@QQQQ@@QQ$@",
-        "OQQQQ@@QQ@@QQQ$@",
-        "OQQQQQ@@@@QQQQ$@",
-        "OQQQQQQ@@QQQQQ$@",
-        "OQQQQQ@@@@QQQQ$@",
-        "OQQQQ@@QQ@@QQQ$@",
-        "OQQQ@@QQQQ@@QQ$@",
-        "OQQQQQQQQQQQQQ$@",
-        "OQQQQQQQQQQQQQ$@",
-        "O$$$$$$$$$$$$$$@",
-        "@@@@@@@@@@@@@@@@",
-    };
-    int x;
-    int y;
-    char c;
-    boxfill8( buf, xsize, COL8_C6C6C6,       0,       0, xsize-1,       0 );
-    boxfill8( buf, xsize, COL8_FFFFFF,       1,       1, xsize-2,       1 );
-    boxfill8( buf, xsize, COL8_C6C6C6,       0,       0,       0, ysize-1 );
-    boxfill8( buf, xsize, COL8_FFFFFF,       1,       1,       1, ysize-2 );
-    boxfill8( buf, xsize, COL8_848484, xsize-2,       1, xsize-2, ysize-2 );
-    boxfill8( buf, xsize, COL8_000000, xsize-1,       0, xsize-1, ysize-2 );
-    boxfill8( buf, xsize, COL8_C6C6C6,       2,       2, xsize-3, ysize-2 );
-    boxfill8( buf, xsize, COL8_000084,       3,       3, xsize-4,      20 );
-    boxfill8( buf, xsize, COL8_848484,       1, ysize-2, xsize-2, ysize-2 );
-    boxfill8( buf, xsize, COL8_000000,       0, ysize-1, xsize-1, ysize-1 );
-    putfonts8_asc( buf, xsize, 24, 4, COL8_FFFFFF, title );
-    for( y = 0; y < 14; y++ )
-    {
-        for( x = 0; x < 16; x++ )
-        {
-            c = close_button[y][x];
-            if( c == '@' )
-            {
-                c = COL8_000000;
-            }
-            else if( c == '$' )
-            {
-                c = COL8_848484;
-            }
-            else if( c == 'Q' )
-            {
-                c = COL8_C6C6C6;
-            }
-            else
-            {
-                c = COL8_FFFFFF;
-            }
-            buf[(5+y)*xsize + (xsize-21+x)] = c;
-        }
-    }
-    return;
-}
-#endif
 
 unsigned  long notify_param;
 void notify_timer( void* param ){
@@ -184,7 +104,8 @@ void HariMain( void )
     unsigned int 	memtotal;
     unsigned long 	desktop_wnd_id;
     unsigned long 	cursor_wnd_id;
-    unsigned long 	counter_wnd_id;
+    unsigned long 	input_wnd_id;
+    /* unsigned long 	counter_wnd_id; */
     int 			top_wnd_toggle = 0;
     int 			ret;
     unsigned long 	que_status 	   = 0;
@@ -285,7 +206,7 @@ void HariMain( void )
         assert();
     }
 
-#if 1
+#if 0
 	/* タイマーを設定 */
 	ctimer_param = desktop_wnd_id;
 	timer.timeout = get_systime() + 200;
@@ -313,6 +234,31 @@ void HariMain( void )
 
     init_mouse_cursor( cursor_wnd_id, COL8_0000FF );
     move_window( cursor_wnd_id, mx, my );
+
+    /* 入力データ表示用のウインドウを作る */
+    ret = create_window( memman,
+                         WINDOW_COLOR_DEPTH_16,
+                         binfo->scrnx,
+                         16,
+                         WM_WINDOW_STATUS_NORMAL,
+                         "input",
+                         &input_wnd_id );
+    if ( ret != 0 ){
+        sprintf( str, "create window error(%d)", ret );
+        push_debug_string(str);
+        assert();
+    }
+    /* 背景(黒) */
+    ret = fill_rect( input_wnd_id,
+					 0, 0,
+					 binfo->scrnx, 16,
+					 COL8_000000 );
+    if ( ret != 0 ) {
+        sprintf( str, "fill_rect error(%d)", ret );
+        push_debug_string( str );
+        assert();
+    }
+    move_window( input_wnd_id, binfo->scrny-16, 0 );
 
 #if 0
 	/* タイマー削除のテスト */
@@ -372,6 +318,23 @@ void HariMain( void )
             /* キーボード割り込み */
 			if( msg_type == E_QUEUE_EVENT_TYPE_KEY )
 			{
+				unsigned char val;
+
+				fill_rect( input_wnd_id, 0, 0, binfo->scrnx, 16, COL8_000000);
+				val = get_key_meaning(msg_value);
+				if( (KEY_MEAN_FULL_KEY_1 <= val) && (val <= KEY_MEAN_FULL_KEY_9)){
+					str[0] = '1' + (val - KEY_MEAN_FULL_KEY_1);
+					str[1] = '\0';
+					print_string( input_wnd_id,
+								  str,
+								  0, 0,
+								  COL8_FFFFFF );
+					
+				}
+				
+				/* show_window( input_wnd_id, */
+				/* 			 0, 0, binfo->scrnx, 16); */
+				
 				show_whole_window( desktop_wnd_id );
 			}
 			/* マウス割り込み */
