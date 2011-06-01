@@ -8,6 +8,7 @@
 #include "int.h"
 #include "debug.h"
 #include "timer.h"
+#include "task.h"
 
 Queue16_t msg_queue;
 #define MSG_BUF_LENGTH (256)
@@ -85,6 +86,12 @@ void ctimer_func( void* param ){
 	}
 }
 
+void task_b_main(void)
+{
+	for(;;){
+		io_hlt();
+	}
+}
 
 /***************/
 /* entry point */
@@ -112,6 +119,7 @@ void HariMain( void )
 	timer_t timer;
 	timer_id_t timer_id;
 	timer_id_t ctimer_id;
+	task_id_t	task_b_id;
 
     init_gdtidt();
     init_pic();
@@ -145,6 +153,12 @@ void HariMain( void )
 
 	/* タイマー管理情報を初期化 */
 	init_timer_manager( memman, &kernel_timer_manager );
+
+	/* タスク情報を初期化する */
+	init_task();
+
+	/* タスクを生成する */
+	create_task( memman, task_b_main, 64 * 1024, &task_b_id );
 
 #if 0
 	/* タイマーを設定 */
@@ -336,6 +350,9 @@ void HariMain( void )
 				/* 			 0, 0, binfo->scrnx, 16); */
 				
 				show_whole_window( desktop_wnd_id );
+
+				/*@@@ test  */
+				/* taskswitch4(); */
 			}
 			/* マウス割り込み */
 			else if( msg_type == E_QUEUE_EVENT_TYPE_MOUSE )

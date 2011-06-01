@@ -443,6 +443,7 @@ int memman_free( MEMMAN* man, unsigned int addr, unsigned int size );
 unsigned int memman_alloc_4k( MEMMAN* man, unsigned int size );
 int memman_free_4k( MEMMAN* man, unsigned int addr, unsigned int size );
 
+#if 0
 /* sheet.c */
 SHEET_CTRL* sheet_ctrl_init( MEMMAN* memman, unsigned char* vram, int xsize, int ysize );
 SHEET* sheet_alloc( SHEET_CTRL* ctrl );
@@ -454,6 +455,7 @@ void sheet_slide( SHEET* sheet, int vx0, int vy0 );
 void sheet_free( SHEET* sheet );
 void sheet_refreshsub( SHEET_CTRL* ctrl, int vx0, int vy0, int vx1, int vy1, int h0, int h1 );
 void sheet_refreshmap( SHEET_CTRL* ctrl, int vx0, int vy0, int vx1, int vy1, int height );
+#endif
 
 /* main.c */
 #if 0 /* ñ¢égópÇÃÇΩÇﬂçÌèú */

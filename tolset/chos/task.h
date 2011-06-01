@@ -1,7 +1,7 @@
 #define TASK_MAX (32)
 
 /* task status segment (32bit) */
-typedef struct tag_tss32_t{
+typedef struct tag_tss32{
 	unsigned long backlink;
 	unsigned long esp0;
 	unsigned long ss0;
@@ -33,30 +33,29 @@ typedef struct tag_tss32_t{
 	unsigned long iomap;
 } tss32_t;
 
-typedef tag_tss32_list_t{
-	tag_tss32_list_t*	prev;
-	tag_tss32_list_t*	next;
-	unsigned long		valid;
-	tss32_list_t		tss;
+typedef struct tag_tss32_list{
+	struct tag_tss32_list*	prev;
+	struct tag_tss32_list*	next;
+	unsigned long			valid;
+	tss32_t					tss;
 } tss32_list_t;
 
-typedef tag_tss32_list_head_t{
+typedef struct tag_tss32_list_head{
 	tss32_list_t*	head;
 	tss32_list_t*	tail;
 	unsigned long	num;
 } tss32_list_head_t;
 
-typedef struct tag_tss32_manager_t{
+typedef struct tag_tss32_manager{
 	tss32_list_head_t	list;
 	tss32_list_t		buf[TASK_MAX];
 } tss32_manager_t;
 
 typedef unsigned long task_id_t;
 
-typedef int (*TASK_ENTRY_FUNC)(void*);
-
+typedef int (*task_entry_func_t)(void*);
 
 void init_task(void);
-int create_task( task_id* id );
+int create_task( MEMMAN* mm, task_entry_func_t func, unsigned long stacksize, task_id_t* id );
 
 

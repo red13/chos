@@ -1,10 +1,16 @@
+#include <stdio.h>
+#include <string.h>
+#include "bootpack.h"
 #include "task.h"
 
 static tss32_manager_t gtsk;
 
 void init_task(void){
 
-	memset(gtsk, 0, sizeof(tss32_manager_t));
+	/*@@ test  */
+	return;
+
+	memset(&gtsk, 0, sizeof(tss32_manager_t));
 
 	gtsk.buf[0].valid = 1;
 	gtsk.buf[0].prev = NULL;
@@ -17,9 +23,10 @@ void init_task(void){
 	gtsk.list.num  = 1;
 }
 
-int create_task( task_id* id ){
+int create_task( MEMMAN* mm, task_entry_func_t func, unsigned long stacksize, task_id_t* id ){
 	int i;
 	tss32_list_t*	list;
+	void* stack_bottom;
 
 	if( gtsk.list.num >= TASK_MAX ){
 		return -1;
@@ -35,7 +42,18 @@ int create_task( task_id* id ){
 
 			list->next = NULL;
 			list->valid = 1;
-			memset( list->tss, 0, sizeof(tss32_t));
+			memset( &list->tss, 0, sizeof(tss32_t));
+			list->tss.eip = (unsigned long)func;
+			list->tss.eflags = 0x00000202;
+			stacksize = (stacksize & 0x03ff)?(stacksize&0xFFFFFC00)+0x400:stacksize;
+			stack_bottom = memman_alloc( mm, stacksize );
+			list->tss.esp = (unsigned long)stack_bottom + stacksize;
+			list->tss.es = 1*8;
+			list->tss.cs = 2*8;
+			list->tss.ss = 1*8;
+			list->tss.ds = 1*8;
+			list->tss.fs = 1*8;
+			list->tss.gs = 1*8;
 			list->tss.iomap = 0x40000000;
 		}
 	}

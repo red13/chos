@@ -11,6 +11,7 @@ mouse.obj \
 memory.obj \
 wm.obj \
 timer.obj \
+task.obj \
 debug.obj
 
 TOOLPATH = ../z_tools/
