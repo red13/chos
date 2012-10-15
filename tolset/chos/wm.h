@@ -1,3 +1,7 @@
+/**
+ * @file
+ * @brief ウインドウ管理処理
+ */
 #ifndef __WM_H_
 #define __WM_H_
 

@@ -1,3 +1,7 @@
+/**
+ * @file
+ * @brief ディスクリプタテーブル設定
+ */
 #include "bootpack.h"
 
 void init_gdtidt( void )

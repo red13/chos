@@ -1,4 +1,9 @@
+/**
+ * @file
+ * @brief ƒ^ƒXƒNˆ—
+ */
 #define TASK_MAX (32)
+
 
 /* task status segment (32bit) */
 typedef struct tag_tss32{

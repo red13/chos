@@ -1,3 +1,7 @@
+/**
+ * @file
+ * @brief ウインドウ管理処理
+ */
 #include <stdio.h>
 #include <string.h>
 #include "bootpack.h"

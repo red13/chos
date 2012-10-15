@@ -1,3 +1,7 @@
+/**
+ * @file
+ * @brief デバッグ処理
+ */
 #include <stdio.h>
 #include <string.h>
 #include "debug.h"

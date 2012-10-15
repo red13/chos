@@ -1,3 +1,7 @@
+/**
+ * @file
+ * @brief タイマー処理
+ */
 #define TIMER_MAX (100)
 
 typedef unsigned long timer_id_t;

@@ -1,3 +1,7 @@
+/**
+ * @file
+ * @brief ‹N“®ˆ—ŠÖ˜A
+ */
 #ifndef BOOTPACK_H_
 #define BOOTPACK_H_
 

@@ -1,3 +1,8 @@
+/**
+ * @file
+ * @brief 起動後，C言語のメイン関数
+ */
+
 #include <stdio.h>
 #include <string.h>
 
@@ -16,6 +21,9 @@ unsigned short msg_buf[MSG_BUF_LENGTH];
 timer_manager_t* kernel_timer_manager = NULL;
 
 
+/**
+ * @brief マウスカーソルの初期化
+ */
 void init_mouse_cursor( unsigned long wnd_id, char bg_color )
 {
     int x;
@@ -60,13 +68,23 @@ void init_mouse_cursor( unsigned long wnd_id, char bg_color )
     return;
 }
 
-unsigned  long notify_param;
+/** タイマ通知用 */
+unsigned long notify_param;
+
+/**
+ * @brief タイマーコールバック関数
+ */
 void notify_timer( void* param ){
 	push_debug_string( "timer execution!" );
 	assert();
 }
 
+/** サイクリックタイマパラメータ */
 unsigned long ctimer_param;
+
+/**
+ * @brief サイクリックタイマハンドラ
+ */
 void ctimer_func( void* param ){
 	unsigned long wid = *(unsigned long*)param;
 	static unsigned char color = 0;
@@ -86,6 +104,9 @@ void ctimer_func( void* param ){
 	}
 }
 
+/**
+ * @brief タスクBのメイン関数
+ */
 void task_b_main(void)
 {
 	for(;;){
@@ -93,9 +114,9 @@ void task_b_main(void)
 	}
 }
 
-/***************/
-/* entry point */
-/***************/
+/**
+ * @brief エントリポイント
+ */
 void HariMain( void )
 {
     /* bootのときにセットした情報 */

@@ -1,3 +1,8 @@
+/**
+ * @file
+ * @brief ƒ}ƒEƒXˆ—
+ */
+
 #ifndef MOUSE_H
 #define MOUSE_H
 

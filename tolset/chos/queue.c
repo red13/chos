@@ -1,6 +1,9 @@
-#include "queue.h"
+/**
+ * @file
+ * @brief キュー処理
+ */
 
-#define queue_c_
+#include "queue.h"
 
 /* キューの初期化 */
 void queue8_init( Queue8_t* que, int size, unsigned char* buf )

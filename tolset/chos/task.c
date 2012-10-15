@@ -1,3 +1,7 @@
+/**
+ * @file
+ * @brief ƒ^ƒXƒNˆ—
+ */
 #include <stdio.h>
 #include <string.h>
 #include "bootpack.h"
@@ -5,7 +9,8 @@
 
 static tss32_manager_t gtsk;
 
-void init_task(void){
+void init_task( void )
+{
 
 	/*@@ test  */
 	return;
@@ -23,10 +28,11 @@ void init_task(void){
 	gtsk.list.num  = 1;
 }
 
-int create_task( MEMMAN* mm, task_entry_func_t func, unsigned long stacksize, task_id_t* id ){
-	int i;
+int create_task( MEMMAN* mm, task_entry_func_t func, unsigned long stacksize, task_id_t* id )
+{
+	int				i;
 	tss32_list_t*	list;
-	void* stack_bottom;
+	void*			stack_bottom;
 
 	if( gtsk.list.num >= TASK_MAX ){
 		return -1;
@@ -58,3 +64,4 @@ int create_task( MEMMAN* mm, task_entry_func_t func, unsigned long stacksize, ta
 		}
 	}
 }
+

@@ -1,4 +1,8 @@
-/* 割り込み関係 */
+/**
+ * @file
+ * @brief 割り込み関係
+ */
+
 #include <stdio.h>
 #include "bootpack.h"
 #include "timer.h"
@@ -10,6 +14,9 @@ extern timer_manager_t* kernel_timer_manager;
 
 static TIME_t time;
 
+/**
+ * @brief PICの初期化
+ */
 void init_pic( void )
 {
     /* PICの初期化 */
@@ -32,6 +39,9 @@ void init_pic( void )
     return;
 }
 
+/**
+ * @brief PIT初期化
+ */
 void init_pit( void )
 {
     io_out8(PIT_CTRL, 0x34);
@@ -40,7 +50,9 @@ void init_pit( void )
     return;
 }
 
-/* timer interrupt */
+/**
+ * @brief タイマ割り込みハンドラ
+ */
 void inthandler20(int *esp)
 {
     unsigned short que_data;
@@ -64,6 +76,10 @@ void inthandler20(int *esp)
     return;
 }
 
+/**
+ * @brief システム時間値取得
+ * @return システム時間(unsigned long)
+ */
 unsigned long get_systime( void )
 {
 	return time.count;

@@ -1,3 +1,7 @@
+/**
+ * @file
+ * @brief ƒLƒ…[ˆ—
+ */
 #ifndef QUEUE_H
 #define QUEUE_H
 
@@ -51,4 +55,4 @@ EXTERN int queue16_get( Queue16_t* q );
 EXTERN int queue16_status( Queue16_t* q );
 
 
-#endif /* QUEUE_ */
+#endif /* QUEUE_H */

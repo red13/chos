@@ -1,3 +1,7 @@
+/**
+ * @file
+ * @brief ƒƒ‚ƒŠˆ—
+ */
 #include "bootpack.h"
 
 unsigned int memtest( unsigned int start, unsigned int end )

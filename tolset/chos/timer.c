@@ -1,3 +1,7 @@
+/**
+ * @file
+ * @brief タイマー処理
+ */
 #include <stdio.h>
 #include <string.h>
 #include "bootpack.h"

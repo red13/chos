@@ -1,39 +1,48 @@
+/**
+ * @file
+ * @brief 描画系処理
+ */
 #include "bootpack.h"
 
+/** 色テーブル */
+static const unsigned char table_rgb[16*3] = {
+	0x00, 0x00, 0x00, /* 0:black   */
+	0xff, 0x00, 0x00, /* 1:red     */
+	0x00, 0xff, 0x00, /* 2:green   */
+	0xff, 0xff, 0x00, /* 3:yellow  */
+	0x00, 0x00, 0xff, /* 4:blue    */
+	0xff, 0x00, 0xff, /* 5:magenta */
+	0x00, 0xff, 0xff, /* 6:cyan    */
+	0xff, 0xff, 0xff, /* 7:white   */
+	0xc6, 0xc6, 0xc6, /* 8:gray    */
+	0x84, 0x00, 0x00, /* 9:dark red      */
+	0x00, 0x84, 0x00, /* 10:dark green   */
+	0x84, 0x84, 0x00, /* 11:dark yellow  */
+	0x00, 0x00, 0x84, /* 12:dark blue    */
+	0x84, 0x00, 0x84, /* 13:dark magenta */
+	0x00, 0x84, 0x84, /* 13:dark cyan    */
+	0x84, 0x84, 0x84, /* 14:dark gray    */
+};
+
+/**
+ * @brief パレット初期化
+ */
 void init_palette( void )
 {
-    static unsigned char table_rgb[16*3] = 
-    {
-        0x00, 0x00, 0x00, /* 0:black   */
-        0xff, 0x00, 0x00, /* 1:red     */
-        0x00, 0xff, 0x00, /* 2:green   */
-        0xff, 0xff, 0x00, /* 3:yellow  */
-        0x00, 0x00, 0xff, /* 4:blue    */
-        0xff, 0x00, 0xff, /* 5:magenta */
-        0x00, 0xff, 0xff, /* 6:cyan    */
-        0xff, 0xff, 0xff, /* 7:white   */
-        0xc6, 0xc6, 0xc6, /* 8:gray    */
-        0x84, 0x00, 0x00, /* 9:dark red      */
-        0x00, 0x84, 0x00, /* 10:dark green   */
-        0x84, 0x84, 0x00, /* 11:dark yellow  */
-        0x00, 0x00, 0x84, /* 12:dark blue    */
-        0x84, 0x00, 0x84, /* 13:dark magenta */
-        0x00, 0x84, 0x84, /* 13:dark cyan    */
-        0x84, 0x84, 0x84, /* 14:dark gray    */
-    };
     set_palette( 0, 15, table_rgb );
     return;
-    
-    /* 'static char' equal DB in assembler */
 }
 
 
+/**
+ * @brief パレット設定
+ */
 void set_palette( int start, int end, unsigned char* rgb )
 {
-    int i;
-    int eflags;
-    const int port = 0x03c8; /* パレット設定 */
-    unsigned char* cur_rgb = rgb;
+    int				i;
+    int				eflags;
+    const int		port	= 0x03c8;	/* パレット設定 */
+    unsigned char*	cur_rgb = rgb;
 
     /* 割り込み許可フラグの値を記録 */
     eflags = io_load_eflags();
@@ -51,6 +60,16 @@ void set_palette( int start, int end, unsigned char* rgb )
     return;
 }
 
+/**
+ * @brief 矩形に色を塗りつぶす
+ * @param[in] vram VRAMのアドレス
+ * @param[in] xsize x座標の最大サイズ
+ * @param[in] c 色番号
+ * @param[in] x0 X座標開始位置
+ * @param[in] y0 Y座標開始位置
+ * @param[in] x1 X座標終了位置
+ * @param[in] y1 Y座標終了位置
+ */
 void boxfill8( unsigned char* vram, int xsize, unsigned char c, int x0, int y0, int x1, int y1 )
 {
     int x;

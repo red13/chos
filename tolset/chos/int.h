@@ -1,3 +1,7 @@
+/**
+ * @file
+ * @brief Š„‚è‚İŠÖ˜Aˆ—
+ */
 #ifndef INT_H_
 #define INT_H_
 
@@ -5,9 +9,9 @@
 #define jiffies (global_time.count)
 
 
-/*******/
-/* PIC */
-/*******/
+/*
+ * PIC
+ */
 #define PIC0_ICW1  (0x0020)
 #define PIC0_OCW2  (0x0020)
 #define PIC0_IMR   (0x0021)

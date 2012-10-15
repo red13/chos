@@ -1,3 +1,7 @@
+/**
+ * @file
+ * @brief キーボード処理
+ */
 #include "bootpack.h"
 #include "queue.h"
 #include "int.h"

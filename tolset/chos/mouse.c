@@ -1,3 +1,8 @@
+/**
+ * @file
+ * @brief マウス処理
+ */
+
 #include "bootpack.h"
 #include "mouse.h"
 #include "queue.h"
@@ -6,7 +11,9 @@
 //extern Queue8_t mouseq;
 extern Queue16_t msg_queue;
 
-/* マウスからの割り込み*/
+/**
+ * @brief マウスの割り込みハンドラ
+ */
 void inthandler2c( int *esp )
 {
     unsigned char mouse_data;
@@ -19,6 +26,9 @@ void inthandler2c( int *esp )
     return;
 }
 
+/**
+ * @brief マウス有効化
+ */
 void enable_mouse( MouseDec_t* mdec )
 {
     /* マウス有効 */
@@ -33,6 +43,9 @@ void enable_mouse( MouseDec_t* mdec )
     return;
 }
 
+/**
+ * @brief マウスからのデータを解析する
+ */
 int mouse_decode( MouseDec_t* mdec, unsigned char data )
 {
     if( mdec->phase == 0 )
