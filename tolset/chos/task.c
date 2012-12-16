@@ -7,13 +7,14 @@
 #include "bootpack.h"
 #include "task.h"
 
+#define IDLE_TASK_GDT (3)
+#define B_TASK_GDT (4)
+
 static tss32_manager_t gtsk;
 
 void init_task( void )
 {
-
-	/*@@ test  */
-	return;
+    SEGMENT_DESCRIPTOR* gdt = (SEGMENT_DESCRIPTOR*) ADR_GDT;
 
 	memset(&gtsk, 0, sizeof(tss32_manager_t));
 
@@ -23,9 +24,14 @@ void init_task( void )
 	memset(&(gtsk.buf[0].tss), 0, sizeof(tss32_t));
 	gtsk.buf[0].tss.iomap = 0x40000000;
 
+	set_segment_descriptor( gdt + IDLE_TASK_GDT, 103, &gtsk.buf[0].tss, AR_TSS32);
+
 	gtsk.list.head = &gtsk.buf[0];
 	gtsk.list.tail = &gtsk.buf[0];
 	gtsk.list.num  = 1;
+
+	load_tr(3 * 8);
+	
 }
 
 int create_task( MEMMAN* mm, task_entry_func_t func, unsigned long stacksize, task_id_t* id )
@@ -33,6 +39,10 @@ int create_task( MEMMAN* mm, task_entry_func_t func, unsigned long stacksize, ta
 	int				i;
 	tss32_list_t*	list;
 	void*			stack_bottom;
+    SEGMENT_DESCRIPTOR* gdt = (SEGMENT_DESCRIPTOR*) ADR_GDT;
+
+
+	return;
 
 	if( gtsk.list.num >= TASK_MAX ){
 		return -1;
@@ -61,6 +71,11 @@ int create_task( MEMMAN* mm, task_entry_func_t func, unsigned long stacksize, ta
 			list->tss.fs = 1*8;
 			list->tss.gs = 1*8;
 			list->tss.iomap = 0x40000000;
+
+			set_segment_descriptor( gdt + (IDLE_TASK_GDT + i),
+									103,
+									&list->tss,
+									AR_TSS32 );
 		}
 	}
 }

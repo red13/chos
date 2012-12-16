@@ -141,6 +141,7 @@ void HariMain( void )
 	timer_id_t timer_id;
 	timer_id_t ctimer_id;
 	task_id_t	task_b_id;
+    SEGMENT_DESCRIPTOR* gdt = (SEGMENT_DESCRIPTOR*) ADR_GDT;
 
     init_gdtidt();
     init_pic();
@@ -373,7 +374,7 @@ void HariMain( void )
 				show_whole_window( desktop_wnd_id );
 
 				/*@@@ test  */
-				/* taskswitch4(); */
+				taskswitch4();
 			}
 			/* É}ÉEÉXäÑÇËçûÇ› */
 			else if( msg_type == E_QUEUE_EVENT_TYPE_MOUSE )

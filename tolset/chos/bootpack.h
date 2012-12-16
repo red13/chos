@@ -16,6 +16,7 @@
 #define LIMIT_BOTPAK (0x0007ffff)
 #define AR_DATA32_RW (0x4092)
 #define AR_CODE32_ER (0x409a)
+#define AR_TSS32	 (0x0089)
 #define AR_INTGATE32 (0x008e)
 
 #define PORT_KEYDAT (0x0060)
@@ -164,6 +165,7 @@ int io_load_eflags( void );
 void io_store_eflags( int eflags );
 void load_gdtr( int limit, int addr );
 void load_idtr( int limit, int addr );
+void load_tr( int tr );
 int load_cr0( void );
 void store_cr0( int cr0 );
 unsigned int memtest_sub( unsigned int start, unsigned int end );

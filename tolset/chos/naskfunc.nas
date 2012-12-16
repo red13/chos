@@ -29,6 +29,8 @@
 		GLOBAL	_asm_inthandler2c
 		GLOBAL	_load_cr0
 		GLOBAL	_store_cr0
+		GLOBAL  _load_tr
+		GLOBAL  _taskswitch4
 		GLOBAL	_memtest_sub
 		EXTERN	_inthandler20
 		EXTERN	_inthandler21
